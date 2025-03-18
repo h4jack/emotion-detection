@@ -154,3 +154,5 @@ root.after(100, update_frame)
 
 # Run the Tkinter main loop
 root.mainloop()
+
+print("\nProgram Terminated...")

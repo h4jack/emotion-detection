@@ -30,15 +30,15 @@ d_label_main = tk.Label(root,
 d_label_main.place(x=20, y=50, width=200, height=50)
 
 d_label_all = tk.Label(root, 
-                       text="All Emotions",
-                       font=('Arial', 15), 
-                       bg='#d3d3d3', 
-                       fg='#203040', 
-                       anchor="nw", 
-                       justify="left",
-                       bd=2,  # Set border width
-                       highlightbackground="green",  # Set border color
-                       highlightthickness=2)  # Set thickness of the border
+                        text="All Emotions",
+                        font=('Arial', 15), 
+                        bg='#d3d3d3', 
+                        fg='#203040', 
+                        anchor="nw", 
+                        justify="left",
+                        bd=2,  # Set border width
+                        highlightbackground="green",  # Set border color
+                        highlightthickness=2)  # Set thickness of the border
 d_label_all.place(x=20, y=110, width=200, height=200)
 
 # Open the webcam
@@ -51,7 +51,6 @@ def resize_frame(frame, max_width, max_height):
     """Resize the frame to fit the window's width and height while maintaining aspect ratio."""
     frame_height, frame_width = frame.shape[:2]
     frame_aspect_ratio = frame_width / frame_height
-
 
     # Determine the limiting factor (width or height) based on the aspect ratio
     if frame_aspect_ratio > ASPECT_RATIO:
@@ -68,7 +67,6 @@ def resize_frame(frame, max_width, max_height):
 
 def update_details(main_emotion, emotion_data):
     """Update the details label with the given information including emotion percentages and main emotion."""
-
     # Update the main emotion label with uppercase text
     d_label_main.config(text=main_emotion.upper(), font=('Arial', 20), bg='#d3d3d3', fg='#203040')
 
