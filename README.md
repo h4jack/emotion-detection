@@ -68,7 +68,7 @@ pip install -r requirements.txt
 - **GUI layout issues**: Ensure you have the required dependencies installed and that the Tkinter window is properly sized.
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/h4jack/emotion-detection/putlicense) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/h4jack/emotion-detection/blob/main/LICENSE) file for details.
 
 ## Acknowledgments
 - **OpenCV**: For face detection using Haar cascades.
