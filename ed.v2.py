@@ -153,14 +153,14 @@ def update_leaderboard_position():
     input_margin = 10  # Adjust this to change the distance between the buttons and the input fields
     input_y_position = y_position - input_margin - 60  # Adjust to place the input field just above the buttons
 
-    name_label.place(x=window_width - 20 - name_l_width, y=input_y_position)
+    name_label.place(x=window_width - 20 - name_e_width, y=input_y_position)
     name_entry.place(x=window_width - 20 - name_e_width, y=input_y_position + 40)  # Adjust Y for entry
 
     # Position the start button
-    start_button.place(x=window_width - 20 - st_btn_width, y=y_position)
+    start_button.place(x=window_width - 20 - name_e_width, y=y_position)
 
     # Position the stop button next to the start button, maintaining right alignment
-    stop_button.place(x=window_width - 40 - sp_btn_width - st_btn_width, y=y_position)
+    stop_button.place(x=(window_width - 20 - name_e_width) + st_btn_width + 20, y=y_position)
 
 def update_frame():
     """Fetches a frame from the webcam and updates the Tkinter canvas"""
