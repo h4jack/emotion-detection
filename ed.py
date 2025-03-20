@@ -7,23 +7,18 @@ from deepface import DeepFace
 import random
 import json
 
-# Initialize the face detection model (OpenCV pre-trained Haar cascades or DNN model)
-# Removed the face_cascade part for drawing blue rectangles.
-
-
-
 # Create a Tkinter window
 root = tk.Tk()
-root.title("Emotion Detection")
+root.title("Expression Detection")
 root.geometry("800x600")  # Start with a window size of 800x600
 
 # Create a canvas to display the video feed
 canvas = Canvas(root, width=800, height=600)
 canvas.pack(fill="both", expand=True)
 
-# Create a label for displaying face details (Emotion, Gender, Age, Race)
+# Create a label for displaying face details (Expression, Gender, Age, Race)
 d_label_main = tk.Label(root, 
-                        text="Main Emotion",
+                        text="Main Expression",
                         font=('Arial', 18),
                         bg='#d3d3d3',
                         fg='#203040',
@@ -34,7 +29,7 @@ d_label_main = tk.Label(root,
 d_label_main.place(x=20, y=50, width=200, height=50)
 
 d_label_all = tk.Label(root, 
-                        text="All Emotions",
+                        text="All Expressions",
                         font=('Arial', 15), 
                         bg='#d3d3d3', 
                         fg='#203040', 
@@ -81,9 +76,9 @@ lboard_list = tk.Listbox(root,
                     height=10, width=30)
 lboard_list.place(x=500, y=90)
 
-# Emotion mapping and user info
+# Expression mapping and user info
 user_score = 0
-current_emotion = None
+current_expression = None
 game_started = False
 lboard = []
 
@@ -102,8 +97,8 @@ def save_leaderboard():
     """Save the leaderboard to the JSON file."""
     # Convert any NumPy data types to native Python types
     for i in range(len(lboard)):
-        name, emotion, score = lboard[i]
-        lboard[i] = (name, emotion, float(score))  # Convert score to float
+        name, expression, score = lboard[i]
+        lboard[i] = (name, expression, float(score))  # Convert score to float
     
     with open(LEADERBOARD_FILE, "w") as f:
         json.dump(lboard, f, indent=4)
@@ -115,8 +110,8 @@ def load_leaderboard():
             leaderboard = json.load(f)
             # Convert any NumPy data types to native Python types when loading
             for i in range(len(leaderboard)):
-                name, emotion, score = leaderboard[i]
-                leaderboard[i] = (name, emotion, float(score))  # Convert score to float
+                name, expression, score = leaderboard[i]
+                leaderboard[i] = (name, expression, float(score))  # Convert score to float
             return leaderboard
     except (FileNotFoundError, json.JSONDecodeError):
         # If the file doesn't exist or is corrupted, return an empty leaderboard
@@ -132,8 +127,8 @@ def show_leaderboard():
     lboard_list.delete(0, tk.END)
 
     # Display the top 10 leaderboard entries
-    for i, (name, emotion, score) in enumerate(lboard[:10]):
-        lboard_list.insert(tk.END, f"{i+1}. {name} - {emotion} - {score:.2f}%")
+    for i, (name, expression, score) in enumerate(lboard[:10]):
+        lboard_list.insert(tk.END, f"{i+1}. {name} - {expression} - {score:.2f}%")
 
 def resize_frame(frame, max_width, max_height):
     """Resize the frame to fit the window's width and height while maintaining aspect ratio."""
@@ -153,26 +148,26 @@ def resize_frame(frame, max_width, max_height):
     # Resize the frame to fit within the max dimensions
     return cv2.resize(frame, (new_width, new_height))
 
-def update_details(main_emotion, emotion_data):
-    """Update the details label with the given information including emotion percentages and main emotion."""
-    # Update the main emotion label with uppercase text
-    global game_started, user_score, current_emotion
-    d_label_main.config(text=main_emotion.upper(), font=('Arial', 20), bg='#d3d3d3', fg='#203040')
+def update_details(main_expression, expression_data):
+    """Update the details label with the given information including Expression percentages and main Expression."""
+    # Update the main Expression label with uppercase text
+    global game_started, user_score, current_expression
+    d_label_main.config(text=main_expression.upper(), font=('Arial', 20), bg='#d3d3d3', fg='#203040')
 
-    # Prepare the sorted emotion data with percentages
-    sorted_emotions = sorted(emotion_data.items(), key=lambda x: x[1], reverse=True)
+    # Prepare the sorted Expression data with percentages
+    sorted_expressions = sorted(expression_data.items(), key=lambda x: x[1], reverse=True)
 
     if(game_started):
-        score = (emotion_data[current_emotion])
+        score = (expression_data[current_expression])
         user_score = max(score, user_score)
-    # Format the emotions and percentages for display
-    emotions_text = "All Emotions\n"
-    for emotion, percentage in sorted_emotions:
-        # Format each emotion and percentage with a tab for alignment
-        emotions_text += f"{emotion.capitalize()}\t{percentage:.2f}%\n"
+    # Format the Expressions and percentages for display
+    expressions_text = "All Expressions\n"
+    for expression, percentage in sorted_expressions:
+        # Format each Expression and percentage with a tab for alignment
+        expressions_text += f"{expression.capitalize()}\t{percentage:.2f}%\n"
 
-    # Update the second label with all emotions
-    d_label_all.config(text=emotions_text)
+    # Update the second label with all Expressions
+    d_label_all.config(text=expressions_text)
 
 def update_leaderboard_position():
     """Update the leaderboard label position once the window is rendered."""
@@ -221,9 +216,9 @@ def update_frame():
     try:
         # Use a faster backend like 'VGG-Face' or 'Facenet'
         analysis = DeepFace.analyze(frame, actions=['emotion'], enforce_detection=False)
-        emotions = analysis[0]['emotion']
-        d_emotion = analysis[0]['dominant_emotion']
-        print(f"\rEmotion : {d_emotion}         ", end='', flush=True)
+        expressions = analysis[0]['emotion']
+        d_expression = analysis[0]['dominant_emotion']
+        print(f"\rExpression : {d_expression}         ", end='', flush=True)
 
         # Get the face region from the analysis
         dominant_face_region = analysis[0]['region']
@@ -233,10 +228,10 @@ def update_frame():
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)  # Green rectangle for dominant face
     except Exception as e:
         print(f"❌ DeepFace Error: {e}")
-        emotions = "Natural"
+        expressions = "Natural"
 
     # Update the details next to the face box
-    update_details(d_emotion, emotions)
+    update_details(d_expression, expressions)
 
     # Ensure canvas dimensions are available and valid
     canvas_width = canvas.winfo_width()
@@ -272,19 +267,19 @@ def update_frame():
     canvas.after(10, update_frame)
 
 def start_game():
-    """Start the game by taking the user's name and randomly selecting an emotion."""
-    global current_emotion, game_started
+    """Start the game by taking the user's name and randomly selecting an Expression."""
+    global current_expression, game_started
     user_name = name_entry.get()
     if user_name == "":
         messagebox.showwarning("Input Error", "Please enter your name.")
         return
 
-    # Randomly choose an emotion from the list
-    emotions_list = ["angry", "disgust", "fear", "happy", "sad", "surprise"]
-    current_emotion = random.choice(emotions_list)
+    # Randomly choose an Expression from the list
+    expressions_list = ["angry", "disgust", "fear", "happy", "sad", "surprise"]
+    current_expression = random.choice(expressions_list)
 
     game_started = True
-    name_label.config(text=f"Do the {current_emotion} Face")
+    name_label.config(text=f"Do the {current_expression} Face")
 
     # Disable the start button and enable the stop button
     start_button.config(state=tk.DISABLED)
@@ -292,24 +287,24 @@ def start_game():
 
 def stop_game():
     """Stop the game and calculate the user's score."""
-    global user_score, current_emotion, game_started
+    global user_score, current_expression, game_started
 
-    if current_emotion is None:
-        messagebox.showwarning("Game Error", "No emotion has been chosen yet.")
+    if current_expression is None:
+        messagebox.showwarning("Game Error", "No Expression has been chosen yet.")
         return
 
     game_started = False
 
     # Add the score to the Leaderboard
-    lboard.append((name_entry.get(), current_emotion, user_score))
+    lboard.append((name_entry.get(), current_expression, user_score))
     lboard.sort(key=lambda x: x[2], reverse=True)
 
     save_leaderboard()
 
     # Update the Leaderboard (show top 10 scores)
     lboard_list.delete(0, tk.END)
-    for i, (name, emotion, score) in enumerate(lboard[:10]):
-        lboard_list.insert(tk.END, f"{i+1}. {name} - {emotion} - {score:.2f}%")
+    for i, (name, expression, score) in enumerate(lboard[:10]):
+        lboard_list.insert(tk.END, f"{i+1}. {name} - {expression} - {score:.2f}%")
     
     name_label.config(text=f"Enter Your Name:")
 
