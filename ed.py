@@ -275,7 +275,7 @@ def start_game():
         return
 
     # Randomly choose an Expression from the list
-    expressions_list = ["angry", "disgust", "fear", "happy", "sad", "surprise"]
+    expressions_list = ["angry", "fear", "happy", "sad", "surprise"]
     current_expression = random.choice(expressions_list)
 
     game_started = True
@@ -300,6 +300,8 @@ def stop_game():
     lboard.sort(key=lambda x: x[2], reverse=True)
 
     save_leaderboard()
+
+    user_score = 0
 
     # Update the Leaderboard (show top 10 scores)
     lboard_list.delete(0, tk.END)
