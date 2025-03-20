@@ -160,6 +160,9 @@ def update_details(main_expression, expression_data):
     if(game_started):
         score = (expression_data[current_expression])
         user_score = max(score, user_score)
+        if(user_score > 60):
+            user_score = user_score - 40 + ((random.random()*20)-2);
+        
     # Format the Expressions and percentages for display
     expressions_text = "All Expressions\n"
     for expression, percentage in sorted_expressions:
@@ -275,7 +278,7 @@ def start_game():
         return
 
     # Randomly choose an Expression from the list
-    expressions_list = ["angry", "fear", "happy", "sad", "surprise"]
+    expressions_list = ["angry", "happy", "sad", "surprise"]
     current_expression = random.choice(expressions_list)
 
     game_started = True
