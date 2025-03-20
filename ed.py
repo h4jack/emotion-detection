@@ -160,8 +160,8 @@ def update_details(main_expression, expression_data):
     if(game_started):
         score = (expression_data[current_expression])
         user_score = max(score, user_score)
-        if(user_score > 60):
-            user_score = user_score - 40 + ((random.random()*20)-2);
+        if(user_score > 70):
+            user_score = user_score - 30 + ((random.random()*20)-2);
         
     # Format the Expressions and percentages for display
     expressions_text = "All Expressions\n"
